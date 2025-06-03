@@ -1,41 +1,60 @@
-from flask import Flask, request, render_template, make_response, redirect, url_for, Response, redirect, url_for, send_from_directory
+from flask import Flask, request, render_template, make_response, Response, redirect, url_for, send_from_directory, flash
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 
 app = Flask(__name__)
+app.secret_key = os.getenv('secret_key')
+
+if not app.secret_key:
+    raise RuntimeError("Secret key not loaded.")
+
 
 @app.route('/', methods=['POST', 'GET'])
 def home():
-	title = "Home"
-	data = "Data"
-
-# DREAD is a risk assessment model. It's made up of 5 components:
-# - Damage: How much damage could an attack cause.
-# - Reproducibility: How easily can the same attack be repeated.
-# - Exploitability: How difficult is it to actually launch an attack.
-# - Affected Users: How many assets are affected by the attack.
-# - Discoverability: How easily can the vulnerability be discovered.
+	dread_values = {'damage': '', 'reproducibility': '', 'exploitability': '',
+        'affectedUsers': '', 'discoverability': 10
+	}
+	dread_score = None
 
 	if request.method == 'POST':
-		form_damage = int(request.form['damage'])
-		form_reproducibility = int(request.form['reproducibility'])
-		form_exploitability = int(request.form['exploitability'])
-		form_affectedUsers = int(request.form['affectedUsers'])
-		form_discoverability = int(10) # Always treated as 10
+		try:
+			form_damage = int(request.form.get('damage', ''))
+			form_reproducibility = int(request.form.get('reproducibility', ''))
+			form_exploitability = int(request.form.get('exploitability', ''))
+			form_affectedUsers = int(request.form.get('affectedUsers', ''))
+			form_discoverability = 10 # Always treated as 10 for calculation
 
-		print(form_damage)
-		print(form_reproducibility)
-		print(form_exploitability)
-		print(form_affectedUsers)
-		print(form_discoverability)
+			dread_values = {
+	                'damage': form_damage, 'reproducibility': form_reproducibility,
+	                'exploitability': form_exploitability, 'affectedUsers': form_affectedUsers,
+	                'discoverability': 10
+	            }
 
-		dread_score = int((form_damage + form_reproducibility + form_exploitability + form_affectedUsers
-			+ form_discoverability) / 5)
+			if not (1 <= form_damage <= 10 and
+					1 <= form_reproducibility <= 10 and
+					1 <= form_exploitability <= 10 and
+					1 <= form_affectedUsers <= 10):
+				flash('All DREAD component scores must be integers between 1 and 10.', 'error')
+				return render_template("index.html", **dread_values)
 
-		print(dread_score)
+			dread_score = int((form_damage + form_reproducibility + form_exploitability + form_affectedUsers
+				+ form_discoverability) / 5)
 
-		return render_template("result.html", title=title, data=data, dread_score=dread_score)
+			return render_template("result.html", **dread_values, dread_score=dread_score)
 
-	return render_template("index.html", title=title, data=data)
+		except ValueError:
+			flash('Please ensure all DREAD component scores are valid numbers.', 'error')
+			return render_template("index.html", **dread_values)
+		except Exception as e:
+			flash(f'An unexpected error occurred: {e}', 'error')
+			print(f"Error: {e}")
+			return render_template("index.html", **dread_values)
+		
+
+	return render_template("index.html")
 
 @app.errorhandler(404)
 def page_not_found(e):
