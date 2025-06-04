@@ -15,41 +15,41 @@
 
 <div class="row">
     <div class="col-4">
-        <strong>Damage</strong>
+        <p><strong>Damage</strong></p>
         <p>On a scale of 0-10, with 0 being no damage and 10 being catastrophic, how bad is the damage?</p>       
     </div>
     <div class="col-8">
-        <input type="number" name="damage" pattern="[0-9]*" inputmode="numeric">
+        <input type="number" name="damage" pattern="[0-9]*" inputmode="numeric" value="{{ damage }}" placeholder="0-10">
     </div>
 </div>
 
 <div class="row">
     <div class="col-4">
         <strong>Reproducibility</strong>
-        <p></p>
+        <p>On a scale of 0-10, how easy would it be to repeat the attack?</p>
     </div>
     <div class="col-8">
-        <input type="number" name="reproducibility" pattern="[0-9]*" inputmode="numeric">
+        <input type="number" name="reproducibility" pattern="[0-9]*" inputmode="numeric" value="{{ reproducibility }}">
     </div>
 </div>
     
 <div class="row">
     <div class="col-4">
         <strong>Exploitability</strong>
-        <p></p> 
+        <p>On a scale of 0-10, how easy is it to exploit the vulnerability?</p> 
     </div>
     <div class="col-8">
-        <input type="number" name="exploitability" pattern="[0-9]*" inputmode="numeric">
+        <input type="number" name="exploitability" pattern="[0-9]*" inputmode="numeric" value="{{ exploitability }}">
     </div>
 </div>
     
 <div class="row">
     <div class="col-4">
         <strong>Affected Users</strong>
-        <p></p>
+        <p>On a scale of 0-10, how many of your users would be affected?</p>
     </div>
     <div class="col-8">
-        <input type="number" name="affectedUsers" pattern="[0-9]*" inputmode="numeric">
+        <input type="number" name="affectedUsers" pattern="[0-9]*" inputmode="numeric" value="{{ affectedUsers }}">
     </div>
 </div>    
 

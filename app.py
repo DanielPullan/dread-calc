@@ -46,7 +46,8 @@ def home():
 								form_discoverability) 
 								/ 5)
 
-			return render_template("result.html", **dread_values, dread_score=dread_score)
+			flash("Your dread score is" + ' ' + str(dread_score), 'score')
+			return render_template("index.html", **dread_values, dread_score=dread_score)
 
 		except ValueError:
 			flash('Please ensure all DREAD component scores are valid numbers.', 'error')
