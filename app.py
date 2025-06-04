@@ -25,34 +25,38 @@ def home():
 			form_discoverability = 	10 # Always treated as 10 for calculation
 
 			dread_values = {
-	                'damage': form_damage, 
-	                'reproducibility': form_reproducibility,
-	                'exploitability': form_exploitability, 
-	                'affectedUsers': form_affectedUsers,
-	                'discoverability': 10
+	                'damage': 			form_damage, 
+	                'reproducibility': 	form_reproducibility,
+	                'exploitability': 	form_exploitability, 
+	                'affectedUsers': 	form_affectedUsers,
+	                'discoverability': 	10
 	            }
 
-			if not (1 <= form_damage <= 10 and
-					1 <= form_reproducibility <= 10 and
-					1 <= form_exploitability <= 10 and
-					1 <= form_affectedUsers <= 10):
+			if not (1 <= form_damage 			<= 10 and
+					1 <= form_reproducibility 	<= 10 and
+					1 <= form_exploitability 	<= 10 and
+					1 <= form_affectedUsers 	<= 10):
 				flash('All DREAD component scores must be integers between 1 and 10.', 'error')
 				return render_template("index.html", **dread_values)
 
-			dread_score = int((form_damage + form_reproducibility + form_exploitability + form_affectedUsers
-				+ form_discoverability) / 5)
+			dread_score = int((	form_damage + 
+								form_reproducibility + 
+								form_exploitability + 
+								form_affectedUsers + 
+								form_discoverability) 
+								/ 5)
 
 			return render_template("result.html", **dread_values, dread_score=dread_score)
 
 		except ValueError:
 			flash('Please ensure all DREAD component scores are valid numbers.', 'error')
 			return render_template("index.html", **dread_values)
+		
 		except Exception as e:
 			flash(f'An unexpected error occurred: {e}', 'error')
 			print(f"Error: {e}")
 			return render_template("index.html", **dread_values)
 		
-
 	return render_template("index.html")
 
 @app.errorhandler(404)
