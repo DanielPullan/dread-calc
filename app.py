@@ -3,14 +3,11 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-
-
 app = Flask(__name__)
 app.secret_key = os.getenv('secret_key')
 
 if not app.secret_key:
     raise RuntimeError("Secret key not loaded.")
-
 
 @app.route('/', methods=['POST', 'GET'])
 def home():
@@ -21,15 +18,17 @@ def home():
 
 	if request.method == 'POST':
 		try:
-			form_damage = int(request.form.get('damage', ''))
-			form_reproducibility = int(request.form.get('reproducibility', ''))
-			form_exploitability = int(request.form.get('exploitability', ''))
-			form_affectedUsers = int(request.form.get('affectedUsers', ''))
-			form_discoverability = 10 # Always treated as 10 for calculation
+			form_damage = 			int(request.form.get('damage', ''))
+			form_reproducibility = 	int(request.form.get('reproducibility', ''))
+			form_exploitability = 	int(request.form.get('exploitability', ''))
+			form_affectedUsers = 	int(request.form.get('affectedUsers', ''))
+			form_discoverability = 	10 # Always treated as 10 for calculation
 
 			dread_values = {
-	                'damage': form_damage, 'reproducibility': form_reproducibility,
-	                'exploitability': form_exploitability, 'affectedUsers': form_affectedUsers,
+	                'damage': form_damage, 
+	                'reproducibility': form_reproducibility,
+	                'exploitability': form_exploitability, 
+	                'affectedUsers': form_affectedUsers,
 	                'discoverability': 10
 	            }
 
